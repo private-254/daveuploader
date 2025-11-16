@@ -1,0 +1,30 @@
+{
+  "name": "catbox-style-uploader",
+  "version": "1.0.0",
+  "description": "Simple Express file uploader with short Catbox-style URLs",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "crypto": "latest",
+    "express": "latest",
+    "multer": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "file-upload",
+    "express",
+    "multer",
+    "catbox",
+    "short-url",
+    "vercel",
+    "render"
+  ],
+  "author": "Dave",
+  "license": "MIT"
+}
