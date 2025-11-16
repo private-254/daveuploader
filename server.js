@@ -36,7 +36,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
     return res.status(400).json({ success: false, error: "No file uploaded" });
 
   // Generate URL using custom domain
-  const fileUrl = `https://trashuploads.zone.id/${req.file.filename}`;
+  const fileUrl = `https://daveuploads.zone.id/${req.file.filename}`;
   res.json({ success: true, url: fileUrl });
 });
 
@@ -55,5 +55,5 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`✅ Daveuploader server running on port ${PORT}`);
-  console.log(`🌐 Custom domain URL example: https://trashuploads.zone.id/yourfile.mp4`);
+  console.log(`🌐 Custom domain URL example: https://daveuploads.zone.id/yourfile.mp4`);
 });
