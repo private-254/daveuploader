@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Dave Uploader-A trusted and secure upload</title>
+  <title>Dave Uploader - A trusted and secure upload</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -246,7 +246,7 @@
 </head>
 <body>
   <div class="upload-box">
-    <h1> Dave Uploader</h1>
+    <h1>Dave Uploader</h1>
     <form id="uploadForm">
       <input type="file" id="file" name="file" required />
       <label for="file"><i class="fas fa-file-upload"></i> Choose File</label>
@@ -284,6 +284,12 @@
       const file = fileInput.files[0];
       if (!file) return;
 
+      // Validate file size (50MB)
+      if (file.size > 50 * 1024 * 1024) {
+        output.innerHTML = "❌ File too large. Maximum size is 50MB";
+        return;
+      }
+
       output.innerHTML = `<span class="loading"><i class="fas fa-spinner fa-spin"></i> Scanning file...</span>`;
       progressContainer.style.display = "none";
       progressBar.style.width = "0%";
@@ -300,7 +306,13 @@
       formData.append("file", file);
 
       const xhr = new XMLHttpRequest();
-xhr.open("POST", "https://daveuploads.zone.id/api/upload", true);
+      
+      // Use relative path for better compatibility
+      const apiUrl = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api/upload'
+        : '/api/upload';
+      
+      xhr.open("POST", apiUrl, true);
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -329,16 +341,23 @@ xhr.open("POST", "https://daveuploads.zone.id/api/upload", true);
             output.innerHTML = `❌ Upload failed: ${data.error || "Unknown error"}`;
           }
         } else {
-          failCount++;
-          saveStats();
-          output.innerHTML = `💥 Server Error: ${xhr.statusText}`;
+          try {
+            const data = JSON.parse(xhr.responseText);
+            failCount++;
+            saveStats();
+            output.innerHTML = `❌ Error: ${data.error || xhr.statusText}`;
+          } catch {
+            failCount++;
+            saveStats();
+            output.innerHTML = `💥 Server Error: ${xhr.statusText}`;
+          }
         }
       };
 
       xhr.onerror = () => {
         failCount++;
         saveStats();
-        output.innerHTML = `Network Error: Could not connect to server.`;
+        output.innerHTML = `🌐 Network Error: Could not connect to server.`;
       };
 
       xhr.send(formData);
@@ -370,7 +389,7 @@ xhr.open("POST", "https://daveuploads.zone.id/api/upload", true);
 
     function chatDev() {
       const phone = "254104260236";
-      const message = encodeURIComponent("Hi, I’d like to chat about Daveuploader");
+      const message = encodeURIComponent("Hi, I'd like to chat about Daveuploader");
       window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
     }
   </script>
