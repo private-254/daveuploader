@@ -93,8 +93,8 @@ app.use((error, req, res, next) => {
   next(error);
 });
 
-// 🌍 Serve uploaded files securely
-app.use("/files", express.static(uploadDir, {
+// 🌍 Serve uploaded files from root (matches your HTML links)
+app.use(express.static(uploadDir, {
   setHeaders: (res, path) => {
     // Security headers
     res.setHeader('X-Content-Type-Options', 'nosniff');
